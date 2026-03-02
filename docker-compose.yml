@@ -1,0 +1,62 @@
+version: "2.4"
+
+services:
+  frontend-service:
+    build: ./frontend-service
+    ports:
+      - "8080:80"
+    depends_on:
+      - cart-service
+      - order-service
+    networks:
+      - ecommerce-net
+
+  cart-service:
+    build: ./cart-service
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/cartdb
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mongo
+    networks:
+      - ecommerce-net
+
+  order-service:
+    build: ./order-service
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/orderdb
+    ports:
+      - "5002:5002"
+    depends_on:
+      - mongo
+    networks:
+      - ecommerce-net
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - ecommerce-net
+
+  mongo-express:
+    image: mongo-express
+    container_name: store-gui
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH: "false"
+    depends_on:
+      - mongo
+    networks:
+      - ecommerce-net
+
+networks:
+  ecommerce-net:
+
+volumes:
+  mongo-data:
