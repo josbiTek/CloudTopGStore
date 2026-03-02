@@ -1,4 +1,4 @@
-# Listed below are the names of the docker images as pused to the docker hub
+# Listed below are the names of the docker images as pushed to the docker hub
 
 1. cloudtogstore-frontend-service
 2. cloudtopgstore-cart-service
